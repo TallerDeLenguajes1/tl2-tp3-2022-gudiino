@@ -13,5 +13,13 @@ namespace EmpresaCadeteria{
             numero=num;
             telefono=tel;
         }
+        public void listarinfo(){
+            Console.WriteLine("Id: {0}; Nombre: {1}; Calle: {2}; Numero: {3}; Telefono: {4}",id,nombre,calle,numero,telefono);
+            //Console.WriteLine("Nombre: {0}",nombre);
+            //Console.WriteLine("Calle: {0}",calle);
+            //Console.WriteLine("Numero: {0}",numero);
+            //Console.WriteLine("Telefono: {0}",telefono);
+            Console.WriteLine();
+        }
     }
 }
