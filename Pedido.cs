@@ -1,17 +1,38 @@
 using System;
 namespace EmpresaCadeteria{
-    class Pedido{
-        private int num_pedido {get; set;}
-        private string observacion {get; set;}
-        protected Cliente? nuevo_cl {get; set;}
-        private string estado_entrega {get; set;}
-        public Pedido(int num, string obs, string estado){
-            num_pedido=num;
-            observacion=obs;
-            estado_entrega=estado;
+    public class Pedido{
+        private static int IDpedido {get; set;}
+        private string? detalle {get; set;}
+        protected Cliente? cliente {get; set;}
+        public enum Estados{EnCurso,Asignado,Entregado,Cancelado};
+        private int estadoPedido {get; set;}
+        public Pedido(int num, string obs, int estado, Cliente cl){
+            IDpedido=num;
+            detalle=obs;
+            estadoPedido=estado;
+            cliente= new Cliente(cl);
+        }
+        public void listar_info_pedido(){
+            Console.WriteLine("DATOS PEDIDO");
+            Console.WriteLine("Numero de pedido: {0}",IDpedido);
+            Console.WriteLine("Observaciones: {0}",detalle);
+            Console.WriteLine("Estado entrega: {0}",Enum.GetName(typeof(Estados),estadoPedido));
+            Console.WriteLine();
+            Console.WriteLine("DATOS CLIENTE");
+            cliente!.listar_info_cliente();
+            Console.WriteLine();
         }
         public void setEstado(){
-            
+            Console.WriteLine("Seleccione nuevo estado pedido");
+            foreach(int i in Enum.GetValues(typeof(Pedido.Estados)))
+            Console.WriteLine("{0} --> {1}",i,Enum.GetName(typeof(Pedido.Estados),i));
+            Console.Write("Seleccion: ");
+            int estado=Convert.ToInt32(Console.ReadLine());
+            estadoPedido=estado;
+            listar_info_pedido();
+        }
+        public int getIdPedi2(){
+            return IDpedido;
         }
     }
     

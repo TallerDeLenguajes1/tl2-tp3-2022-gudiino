@@ -14,15 +14,10 @@ namespace EmpresaCadeteria
 
             string? Linea = "";
             List<string[]> LecturaDelArchivo = new List<string[]>();
-            int cont=0;
             while ((Linea = StrReader.ReadLine()) != null)
             {
-                if(cont!=0){
-                    string[] Fila = Linea.Split(caracter);
-                    LecturaDelArchivo.Add(Fila);
-                }else{
-                    cont=1;
-                }
+                string[] Fila = Linea.Split(caracter);
+                LecturaDelArchivo.Add(Fila);
             }
             MiArchivo.Close();
             return LecturaDelArchivo;

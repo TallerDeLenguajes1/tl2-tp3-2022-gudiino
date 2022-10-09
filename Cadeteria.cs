@@ -2,50 +2,56 @@ using System;
 using System.Collections.Generic;
 namespace EmpresaCadeteria{
     class Cadeteria{
-        private string nombre {get; set;}
-        private string telefono {get; set;}
+        private string? nombre {get; set;}
+        private string? telefono {get; set;}
+        private static float pago_x_entrega {get; set;}
+        private static int cantidad_pedidos=0;
         private List<Cadete>? cadetes {get; set;}
-        private float pago_x_entrega {get; set;}
-        public Cadeteria(string nom, string tel, float pago){
-            nombre=nom;
-            telefono=tel;
-            pago_x_entrega=pago;
+        public Cadeteria(){
+            cargarDatos();
         }
-        public void cargarCadetes(){
+        private void cargarDatos(){
             cadetes=new List<Cadete>();
             string archivo = "listaCadetes.csv";
+            bool aux=false;
             List<string[]> lista_cadetes=HelperDeArchivos.LeerCsv(archivo,',');
             foreach (var item in lista_cadetes)
             {//Cadete(int iden, string nom, string dir,int num, string tel)
-                int n = Convert.ToInt32(item[0]);
-                int x = Convert.ToInt32(item[3]);
-                cadetes.Add(new Cadete(n,item[1],item[2],x,item[4]));
+                if(aux==true){
+                    int n = Convert.ToInt32(item[0]);
+                    int x = Convert.ToInt32(item[3]);
+                    cadetes.Add(new Cadete(n,item[1],item[2],x,item[4]));
+                }else{
+                    nombre=item[0];
+                    telefono=item[1];
+                    pago_x_entrega= Convert.ToSingle(item[2]);
+                    aux=true;
+                }
             }
         }
-        public void mostrarDatos(){
-            Console.WriteLine("+++++++++++++++++++++++++++++++++");
-            Console.WriteLine("Nombre Cadeteria: {0}",nombre);
-            Console.WriteLine("Telefono: {0}",telefono);
-            Console.WriteLine("Pago por entrega: {0}",pago_x_entrega);
-            Console.WriteLine("+++++++++++++++++++++++++++++++++");
+        public void listar_info_cadeteria(){
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("Nombre Cadeteria: {0} | Telefono: {1} | Pago por entrega: ${2}",nombre,telefono,pago_x_entrega);
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             Console.WriteLine("Cadetes registrados");
             Console.WriteLine();
+            Console.WriteLine("Id     |Nombre      |Calle              |Numero       |Telefono");
             foreach (var item in cadetes!)
             {
-                item.listarinfo();
+                item.listar_info_persona();
             }
         }
-        public void asignarPedidoCadete(){
-            
+        public int getNumPedido(){
+            return cantidad_pedidos;
         }
-        public void pagarCadete(){
-
+        public void setNumPedido(){
+            cantidad_pedidos++;
         }
-        public void eliminarPedido(){
-
+        public List<Cadete> getCadetes(){
+            return cadetes!;
         }
-        public void cambiarCadete(){
-            
+        public float getMontoPago(){
+            return pago_x_entrega;
         }
     }
 }
