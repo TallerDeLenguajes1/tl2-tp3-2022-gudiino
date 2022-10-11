@@ -26,5 +26,15 @@ namespace EmpresaCadeteria{
         public void eliminarPedido(Pedido item){
             pedidos!.Remove(item);
         }
+        public void mostrar_lista_pedidos(){
+            if(pedidos!.Count!=0){
+                foreach (var item in pedidos)
+                {
+                    item.listar_info_pedido();
+                }
+            }else{
+                Console.WriteLine("LISTA DE PEDIDOS DEL CADETE VACIA");
+            }
+        }
     }
 }

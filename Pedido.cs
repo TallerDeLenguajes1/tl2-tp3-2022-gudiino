@@ -1,7 +1,7 @@
 using System;
 namespace EmpresaCadeteria{
     public class Pedido{
-        protected static int IDpedido {get; set;}
+        protected int IDpedido {get; set;}
         protected string? detalle {get; set;}
         protected Cliente? cliente {get; set;}
         public enum Estados{EnCurso,Asignado,Entregado,Cancelado};
