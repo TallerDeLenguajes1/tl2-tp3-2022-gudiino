@@ -11,11 +11,18 @@ namespace EmpresaCadeteria{
             listar_info_persona();
             Console.WriteLine();
         }
-        public float jornalAcobrar(float monto){
-            return CantidadPedidos()*monto;
+        public float jornalAcobrar(){
+            return CantidadPedidos()*Cadeteria.pago_x_entrega;
         }
         public int CantidadPedidos(){
-            return pedidos!.Count;
+            int cont=0;
+            foreach (var pd2 in pedidos!)
+            {
+                if(pd2.getEstado()==2){//estado 2, entregado
+                    cont++;
+                }
+            }
+            return cont;
         }
         public void agregarPedido(Pedido nuevo){
             pedidos!.Add(nuevo);

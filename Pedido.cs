@@ -4,7 +4,7 @@ namespace EmpresaCadeteria{
         protected int IDpedido {get; set;}
         protected string? detalle {get; set;}
         protected Cliente? cliente {get; set;}
-        public enum Estados{EnCurso,Asignado,Entregado,Cancelado};
+        public enum Estados{EnCurso,Asignado,Entregado,Cancelado,Extraviado};
         protected int estadoPedido {get; set;}
         public Pedido(int num, string obs, int estado, Cliente cl){
             IDpedido=num;
@@ -34,6 +34,9 @@ namespace EmpresaCadeteria{
         }
         public int getIdPedi2(){
             return IDpedido;
+        }
+        public int getEstado(){
+            return estadoPedido;
         }
     }
     

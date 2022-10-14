@@ -39,7 +39,7 @@ namespace EmpresaCadeteria{
                             ;
                             Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             //altaPedido(sistema);
-                            pedidos=altaPedido2(sistema,pedidos);
+                            pedidos=altaPedido(sistema,pedidos);
                             Continuar();
                             break;
                         case 2:
@@ -48,7 +48,6 @@ namespace EmpresaCadeteria{
                             Console.WriteLine();
                             break;
                         case 3:
-                            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             cambiar_estado_pedido(sistema, pedidos);
                             Continuar();
                             break;
@@ -136,23 +135,8 @@ namespace EmpresaCadeteria{
             Console.WriteLine("0 --> FINALIZAR");
             Console.WriteLine();
         }
-        public static void altaPedido(Cadeteria sistema){
-            //ingreso datos del pedido
-            int opc=1;
-            while(opc!=0)
-            {
-                Pedido nuevoPedido=CargaDatosPedido(sistema.getNumPedido());
-                if (nuevoPedido!=null){
-                    Cadeteria.setNumPedido();
-                    AsignarPedidoCadete(sistema, nuevoPedido);
-                    opc=0;
-                }else{
-                    Console.WriteLine("FALLO ALTA PEDIDO");
-                    opc=FinalizarReintentar();
-                }
-            }
-        }
-        public static List<Pedido> altaPedido2(Cadeteria sistema, List<Pedido> pedidos){
+        //*****************************************************
+        public static List<Pedido> altaPedido(Cadeteria sistema, List<Pedido> pedidos){
             //ingreso datos del pedido
             int opc=1;
             while(opc!=0)
@@ -169,6 +153,70 @@ namespace EmpresaCadeteria{
             }
             return pedidos;
         }
+             
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        private static Pedido CargaDatosPedido(int numPedido){
+            Console.WriteLine("DATOS DEL PEDIDO");
+            Pedido? nuevoPedido;
+            int nro_pedido=numPedido+1;
+            Console.WriteLine("Numero de pedido: {0}", nro_pedido);
+            Console.Write("Ingrese Detalle Pedido: ");
+            string? observacion=Console.ReadLine();
+            Console.WriteLine("Estado inicial pedido: {0}",Enum.GetName(typeof(Pedido.Estados),0));
+            //foreach(int i in Enum.GetValues(typeof(Pedido.Estados)))
+            //Console.WriteLine("{0} --> {1}",i,Enum.GetName(typeof(Pedido.Estados),i));
+            //Console.Write("Seleccion: ");
+            int estado=0;
+            Cliente nuevoCL=CargaDatosCliente();
+            if(nuevoCL!=null){
+                System.Console.WriteLine();
+                nuevoPedido= new Pedido(nro_pedido,observacion!,estado,nuevoCL);
+                Console.WriteLine("\nOPERACION ALTA PEDIDO EXITOSA");
+            }else{
+                Console.Write("FALLO CARGA DATOS CLIENTE");
+                nuevoPedido=null;
+            }
+            return nuevoPedido!;
+        }
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        private static Cliente CargaDatosCliente(){
+            Cliente? nuevoCL=null;
+            int opc=1;
+            while(opc!=0)
+            {
+                Console.WriteLine("DATOS DEL CLIENTE");
+                Console.Write("Id: ");
+                string? valorID=Console.ReadLine();
+                int id;
+                bool cambioID=int.TryParse(valorID,out id);
+                //int id =Convert.ToInt32(Console.ReadLine());
+                Console.Write("Nombre: ");
+                string? nom =Console.ReadLine();
+                Console.Write("Direccion: ");
+                string? dire =Console.ReadLine();
+                Console.Write("Numero: ");
+                string? valorDir=Console.ReadLine();
+                //int numDir =Convert.ToInt32(Console.ReadLine());
+                int numDir;
+                bool cambioDir=int.TryParse(valorDir,out numDir);
+                Console.Write("Telefono: ");
+                string? tel =Console.ReadLine();
+                Console.Write("Referencia direccion: ");
+                string? direRefe =Console.ReadLine();
+                if(cambioID&&cambioDir){
+                    nuevoCL=new Cliente(id,nom!,dire!,numDir,tel!,direRefe!);
+                    Console.WriteLine("\nOPERACION ALTA CLIENTE EXITOSA");
+                    opc=0; 
+                }else{
+                    Console.WriteLine("FALLO CARGA DATOS CLIENTE");
+                    Console.WriteLine("Algunos de los datos Id cliente o Direccion cliente es invalido");
+                    Console.WriteLine("Reingrese datos con los valores numericos correspondientes, sino.");
+                    opc=FinalizarReintentar();
+                }
+            }
+            return nuevoCL!;
+        }
+        //***********************************************
         private static void AsignarPedidoCadete2(Cadeteria sistema, List<Pedido> pedidos){
             int opc=1;
             sistema.mostra_lista_cadetes();
@@ -225,65 +273,6 @@ namespace EmpresaCadeteria{
                     opc=FinalizarReintentar();
                 }
             } 
-        }     
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        private static Pedido CargaDatosPedido(int numPedido){
-            Console.WriteLine("DATOS DEL PEDIDO");
-            Pedido? nuevoPedido;
-            int nro_pedido=numPedido+1;
-            Console.WriteLine("Numero de pedido: {0}", nro_pedido);
-            Console.Write("Ingrese Detalle Pedido: ");
-            string? observacion=Console.ReadLine();
-            Console.WriteLine("Estado inicial pedido: {0}",Enum.GetName(typeof(Pedido.Estados),0));
-            //foreach(int i in Enum.GetValues(typeof(Pedido.Estados)))
-            //Console.WriteLine("{0} --> {1}",i,Enum.GetName(typeof(Pedido.Estados),i));
-            //Console.Write("Seleccion: ");
-            int estado=0;
-            Cliente nuevoCL=CargaDatosCliente();
-            if(nuevoCL!=null){
-                nuevoPedido= new Pedido(nro_pedido,observacion!,estado,nuevoCL);
-            }else{
-                Console.Write("FALLO CARGA DATOS CLIENTE");
-                nuevoPedido=null;
-            }
-            return nuevoPedido!;
-        }
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        private static Cliente CargaDatosCliente(){
-            Cliente? nuevoCL=null;
-            int opc=1;
-            while(opc!=0)
-            {
-                Console.WriteLine("DATOS DEL CLIENTE");
-                Console.Write("Id: ");
-                string? valorID=Console.ReadLine();
-                int id;
-                bool cambioID=int.TryParse(valorID,out id);
-                //int id =Convert.ToInt32(Console.ReadLine());
-                Console.Write("Nombre: ");
-                string? nom =Console.ReadLine();
-                Console.Write("Direccion: ");
-                string? dire =Console.ReadLine();
-                Console.Write("Numero: ");
-                string? valorDir=Console.ReadLine();
-                //int numDir =Convert.ToInt32(Console.ReadLine());
-                int numDir;
-                bool cambioDir=int.TryParse(valorDir,out numDir);
-                Console.Write("Telefono: ");
-                string? tel =Console.ReadLine();
-                Console.Write("Referencia direccion: ");
-                string? direRefe =Console.ReadLine();
-                if(cambioID&&cambioDir){
-                    nuevoCL=new Cliente(id,nom!,dire!,numDir,tel!,direRefe!);
-                    opc=0; 
-                }else{
-                    Console.WriteLine("FALLO CARGA DATOS CLIENTE");
-                    Console.WriteLine("Algunos de los datos Id cliente o Direccion cliente es invalido");
-                    Console.WriteLine("Reingrese datos con los valores numericos correspondientes, sino.");
-                    opc=FinalizarReintentar();
-                }
-            }
-            return nuevoCL!;
         }
         //+++++++++++++++++++++++++++++++++
         private static void AsignarPedidoCadete(Cadeteria sistema, Pedido nuevoPedido){
@@ -330,6 +319,9 @@ namespace EmpresaCadeteria{
         }
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         public static void cambiar_estado_pedido(Cadeteria sistema,List<Pedido> pedidos){
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("INGRESE LOS DATOS SOLICITADOS PARA UN CAMBIO DE ESTADO DE UN PEDIDO");
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             int opc=1;
             sistema.mostra_lista_cadetes();
             int rango=sistema.getCadetes().Count;
@@ -354,7 +346,6 @@ namespace EmpresaCadeteria{
                                         Console.WriteLine("++++++++++++++++++++++++++++++");
                                         Console.WriteLine("+  CAMBIO DE ESTADO EXITOSO  +");
                                         Console.WriteLine("++++++++++++++++++++++++++++++");
-                                        Continuar();
                                         return;
                                     }
                                 }
@@ -462,46 +453,64 @@ namespace EmpresaCadeteria{
                 }
             }
         }
+        //***********************************
         private static void informe_pedidos(Cadeteria sistema){
             float montoTotalPago=0;
             int cantidadTotalPedido=0;
-            foreach (var cadete in sistema.getCadetes())
+            var recaudacionXcdt = from cdt in sistema.getCadetes()
+                                    where cdt.getPedidos().Count>0
+                                    select cdt;
+            if ((recaudacionXcdt.Count())!=0)
             {
-                cadete.listar_info_cadete();
-                Console.WriteLine("Cantidad de pedidos: {0}",cadete.CantidadPedidos());
-                cantidadTotalPedido+=cadete.CantidadPedidos();
-                Console.WriteLine("Monto a cobrar: {0}",cadete.jornalAcobrar(sistema.getMontoPago()));
-                montoTotalPago+=sistema.getMontoPago();
+                foreach (var cdtX in recaudacionXcdt)
+                {
+                    cdtX.listar_info_cadete();
+                    Console.WriteLine("Cantidad de pedidos: {0}",cdtX.CantidadPedidos());
+                    cantidadTotalPedido+=cdtX.CantidadPedidos();
+                    Console.WriteLine("Monto a cobrar: {0}",cdtX.jornalAcobrar());
+                    montoTotalPago+=cdtX.jornalAcobrar();
+                    Console.WriteLine();
+                }
+                Console.WriteLine("===============================Resumen================================");
+                Console.WriteLine("Cantidad total de pedidos: {0}",cantidadTotalPedido);
+                Console.WriteLine("Cantidad total de pago: {0}",montoTotalPago);
+                try
+                {
+                    float promedio=Convert.ToSingle(cantidadTotalPedido)/Convert.ToSingle(recaudacionXcdt.Count());
+                    Console.WriteLine("Envios promedio por cadete: {0}",Math.Round(promedio,2));
+                }
+                catch (System.Exception ex)
+                {
+                    Console.WriteLine("Error en calculo  de promedio",ex.Message);
+                }
+            }else{
+                System.Console.WriteLine("AUN NO HAY PEDIDOS ENTREGADOS");
             }
-            Console.WriteLine("===============================Resumen================================");
-            Console.WriteLine("Cantidad total de pedidos: {0}",cantidadTotalPedido);
-            Console.WriteLine("Cantidad total de pago: {0}",montoTotalPago);
-            float promedio=Convert.ToSingle(cantidadTotalPedido)/Convert.ToSingle(sistema.getCadetes().Count());
-            Console.WriteLine("Envios promedio por cadete: {0}",Math.Round(promedio,2));
         }
+        //**********************************
         public static List<Pedido> pruebaCargaPedidos(Cadeteria sistema,List<Pedido> pedidos){
             //Cliente(int iden, string nom, string dir,int num, string tel, string dirREf)
             Cliente cliente1=new Cliente(1,"juan","alsina",156,"121212121","direRefenulo");
-            Cliente cliente2=new Cliente(1,"marcos","alsina",156,"121212121","sin puerta");
-            Cliente cliente3=new Cliente(1,"eli","alsina",156,"121212121","esquina");
-            Cliente cliente4=new Cliente(1,"zulema","alsina",156,"121212121","casa roja");
+            Cliente cliente2=new Cliente(2,"marcos","alsina",156,"121212121","sin puerta");
+            Cliente cliente3=new Cliente(3,"eli","alsina",156,"121212121","esquina");
+            Cliente cliente4=new Cliente(4,"zulema","alsina",156,"121212121","casa roja");
             //Pedido(int num, string obs, int estado, Cliente cl)
-            Pedido pedido1= new Pedido(sistema.getNumPedido()+1,"computadora",0,cliente1);
+            Pedido pedido1= new Pedido(sistema.getNumPedido()+1,"computadora",2,cliente1);
             Cadeteria.setNumPedido();
             //pedido1.listar_info_pedido();
             pedidos.Add(pedido1);
             //Console.WriteLine();
-            Pedido pedido2= new Pedido(sistema.getNumPedido()+1,"lampara",0,cliente2);
+            Pedido pedido2= new Pedido(sistema.getNumPedido()+1,"lampara",2,cliente2);
             Cadeteria.setNumPedido();
             //pedido2.listar_info_pedido();
             pedidos.Add(pedido2);
             //Console.WriteLine();
-            Pedido pedido3= new Pedido(sistema.getNumPedido()+1,"facturas",0,cliente3);
+            Pedido pedido3= new Pedido(sistema.getNumPedido()+1,"facturas",2,cliente3);
             Cadeteria.setNumPedido();
             //pedido3.listar_info_pedido();
             pedidos.Add(pedido3);
             //Console.WriteLine();
-            Pedido pedido4= new Pedido(sistema.getNumPedido()+1,"supermercado",0,cliente4);
+            Pedido pedido4= new Pedido(sistema.getNumPedido()+1,"supermercado",2,cliente4);
             Cadeteria.setNumPedido();
             //pedido4.listar_info_pedido();
             //Console.WriteLine();

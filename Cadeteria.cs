@@ -7,7 +7,7 @@ namespace EmpresaCadeteria{
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private string? nombre {get; set;}
         private string? telefono {get; set;}
-        private static float pago_x_entrega {get; set;}
+        public static float pago_x_entrega {get; set;}
         private static int cantidad_pedidos_dia=0;
         private List<Cadete>? cadetes {get; set;}
         public Cadeteria(){
@@ -91,9 +91,6 @@ namespace EmpresaCadeteria{
         }
         public List<Cadete> getCadetes(){
             return cadetes!;
-        }
-        public float getMontoPago(){
-            return pago_x_entrega;
         }
     }
 }
